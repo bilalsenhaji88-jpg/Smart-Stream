@@ -14,6 +14,6 @@ export async function fetchdata() {
 
     } catch (error) {
         console.error("Failed to fetch channels:", error)
-        throw error
+      
     }
 }
