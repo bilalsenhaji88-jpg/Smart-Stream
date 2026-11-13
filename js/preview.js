@@ -1,5 +1,7 @@
 import { state } from "./states.js";
 
+let hls = null;
+
 export function selectionnerChannel(list, channels, preview) {
 
     list.addEventListener("click", (event) => {
@@ -36,12 +38,26 @@ export function selectionnerChannel(list, channels, preview) {
 
 function afficherPreview(channel, preview) {
 
+    if (hls) {
+        hls.destroy();
+        hls = null;
+    }
+
     preview.innerHTML = `
-        <img
-            src="${channel.previewImage}"
-            alt="${channel.name}"
-            class="w-full h-full object-cover"
-        >
+        <video id="player" controls autoplay class="w-full h-full rounded-xl bg-black"></video>
     `;
 
+    const video = preview.querySelector("#player");
+    const url = channel.streamUrl;
+
+    if (url.includes(".m3u8") && Hls.isSupported()) {
+        hls = new Hls();
+        hls.loadSource(url);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.ERROR, (event, data) => {
+            console.log(channel.name, data.type, data.details, data.response?.code);
+        });
+    } else {
+        video.src = url;
+    }
 }
