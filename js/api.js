@@ -1,8 +1,6 @@
-
-
 export async function fetchdata() {
     try {
-        const response = await fetch("https://6af50467f6270fa08d67a425.mockapi.io/channels")
+        const response = await fetch("https://api.npoint.io/f67e0908726797472791")
 
         if (!response.ok) {
             throw new Error(`HTTP Error: ${response.status}`)
@@ -14,6 +12,6 @@ export async function fetchdata() {
 
     } catch (error) {
         console.error("Failed to fetch channels:", error)
-      
+        throw error
     }
 }
